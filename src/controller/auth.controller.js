@@ -2,6 +2,7 @@ const User = require("../models/user.Schema.js");
 const bcrypt = require("bcrypt");
 
 const Token = require('../utility/jsonWebToken.utility.js')
+const jwt = require("jsonwebtoken")
 
 // Register User
 const RegisterUser = async (req, res) => {

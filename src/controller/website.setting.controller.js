@@ -151,10 +151,6 @@ const updateSettings = async (req, res) => {
 };
 
 module.exports = {
-  updateSettings,
-};
-
-module.exports = {
   getSettings,
   createSettings,
   updateSettings,
