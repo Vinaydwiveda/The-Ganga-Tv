@@ -28,11 +28,12 @@ const RegisterUser = async (req, res) => {
     });
 
     const result = Token(user);
-    res.cookie('token',result,{maxAge:1000*60*60824})
+    res.cookie('token',result,{maxAge:1000*60*60*24*7, httpOnly: true, sameSite: 'none', secure: true})
 
     res.status(201).json({
       success: true,
       message: "User registered successfully",
+      token: result,
       user,
     });
   } catch (error) {
@@ -67,11 +68,12 @@ const LoginUser = async (req, res) => {
     }
 
     const result = Token(user);
-    res.cookie('token',result,{maxAge:1000*60*60824})
+    res.cookie('token',result,{maxAge:1000*60*60*24*7, httpOnly: true, sameSite: 'none', secure: true})
 
     res.status(200).json({
       success: true,
       message: "Login successful",
+      token: result,
       user,
     });
   } catch (error) {
@@ -84,7 +86,15 @@ const LoginUser = async (req, res) => {
 
 const MeUser = async (req, res) => {
   try {
-    const token = req.cookies?.token;
+    // Check Authorization header first, then fall back to cookie
+    let token = null;
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1];
+    } else {
+      token = req.cookies?.token;
+    }
+
     if (!token) {
       return res.status(401).json({ success: false, message: "Token required" });
     }
