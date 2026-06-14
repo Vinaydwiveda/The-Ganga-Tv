@@ -21,7 +21,7 @@ router.get("/", getAllNews);
 router.get("/:id", getNewsById);
 
 // Update
-router.put("/:id", auth("admin", "editor"), updateNews);
+router.put("/:id", auth("admin", "editor"),upload.single("thumbnail"), updateNews);
 
 // Delete
 router.delete("/:id", auth("admin"), deleteNews);
