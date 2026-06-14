@@ -89,21 +89,18 @@ const getNewsById = async (req, res) => {
 // Update News
 const updateNews = async (req, res) => {
   try {
-    if (req.file) {
-       uploaded = await uploadImage(req.file); 
+    let updateData = { ...req.body };
 
-      thumbnail = uploaded.url;
-      thumbnailFileId = uploaded.fileId;
+    if (req.file) {
+      const uploaded = await uploadImage(req.file);
+
+      updateData.thumbnail = uploaded.url;
+      updateData.thumbnailFileId = uploaded.fileId;
     }
+
     const news = await News.findByIdAndUpdate(
       req.params.id,
-      req.body,
-      uploaded
-        ? {
-            thumbnail: uploaded.url,
-            thumbnailFileId: uploaded.fileId,
-          }
-        : {},
+      updateData,
       {
         new: true,
         runValidators: true,
@@ -122,6 +119,8 @@ const updateNews = async (req, res) => {
       data: news,
     });
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
       success: false,
       message: error.message,
