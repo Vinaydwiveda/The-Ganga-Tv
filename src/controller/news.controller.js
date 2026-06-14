@@ -89,9 +89,21 @@ const getNewsById = async (req, res) => {
 // Update News
 const updateNews = async (req, res) => {
   try {
+    if (req.file) {
+       uploaded = await uploadImage(req.file); 
+
+      thumbnail = uploaded.url;
+      thumbnailFileId = uploaded.fileId;
+    }
     const news = await News.findByIdAndUpdate(
       req.params.id,
       req.body,
+      uploaded
+        ? {
+            thumbnail: uploaded.url,
+            thumbnailFileId: uploaded.fileId,
+          }
+        : {},
       {
         new: true,
         runValidators: true,
