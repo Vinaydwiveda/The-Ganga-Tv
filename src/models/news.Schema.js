@@ -10,12 +10,16 @@ const newsSchema = new mongoose.Schema(
 
     summary:{
         type:String,
-        required:true
+        required:true,
+        trim:true,
+        maxlength:500
     },
 
     description:{
         type:String,
-        required:true
+        required:true,
+        trim:true,
+        maxlength:5000
     },
 
   category:{

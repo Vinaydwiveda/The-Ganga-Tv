@@ -11,6 +11,9 @@ const {
 
 const auth = require("../middleware/auth.middleware.js");
 
+const { validate } = require("../middleware/validation.middleware.js");
+const { settingsValidation } = require("../utility/validationSchemas.js");
+
 // Public
 router.get("/", getSettings);
 
@@ -22,16 +25,20 @@ router.post(
     { name: "logo", maxCount: 1 },
     { name: "banner", maxCount: 1 },
   ]),
+  settingsValidation,
+  validate,
   createSettings
 );
 
-router.put( 
+router.put(
   "/",
   auth("admin"),
   upload.fields([
     { name: "logo", maxCount: 1 },
     { name: "banner", maxCount: 1 },
   ]),
+  settingsValidation,
+  validate,
   updateSettings
 );
 
